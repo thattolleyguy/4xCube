@@ -26,14 +26,25 @@ void cube2tmp(void);
 void setvoxel(int x, int y, int z)
 { 
 	if (inrange(x, y, z))
+	{
+		if(y<=1)
 		cube[z][y] |= (1 << x);
+		else
+		cube[z][y] |= (0x08 >>x);
+		
+	}
 }
 
 // Clear a voxel in the cube buffer
 void clrvoxel(int x, int y, int z)
 {
 	if (inrange(x, y, z))
-	cube[z][y] &= ~(1 << x);
+	{
+		if(y<=1)
+			cube[z][y] &= ~(1 << x);
+		else
+			cube[z][y] &= ~(0x08 >> x);	
+	}
 }
 
 // Get the current status of a voxel
@@ -41,10 +52,15 @@ unsigned char getvoxel(int x, int y, int z)
 {
 	if (inrange(x, y, z))
 	{
-		if (cube[z][y] & (1 << x))
+		if (y<=1 && cube[z][y] & (1 << x))
 		{
 			return 0x01;
-		} else
+		}
+		else if (y>=2 && cube[z][y] & (0x08 >> x)) 
+		{
+			return 0x01;
+		}
+		else
 		{
 			return 0x00;
 		}
@@ -56,7 +72,10 @@ unsigned char getvoxel(int x, int y, int z)
 void flpvoxel(int x, int y, int z)
 {
 	if (inrange(x, y, z))
+	if(y<=1)
 	cube[z][y] ^= (1 << x);
+	else
+	cube[z][y] ^= (0x08 >> x);
 }
 
 // This function validates that we are drawing inside the cube.

@@ -82,6 +82,7 @@ int main (void)
 	//launch_effect(4);
 	// Main program loop.
 	startup();
+	launch_effect(11);
 	while (1)
 	{
 		for (i=0;i<13;i++)
@@ -263,7 +264,7 @@ ISR(TIMER2_COMP_vect)
 	// Take the current 2D image at the current layer along the Z axis
 	// and place it on the LED grid.
 	GRID1 = (0x0f & cube[current_layer][0]) | (0xf0 & (cube[current_layer][1] << 4));
-	GRID2 = (0x0f & cube[current_layer][2]) | (0xf0 & (cube[current_layer][3] << 4));
+	GRID2 = (0x0f & cube[current_layer][3]) | (0xf0 & (cube[current_layer][2] << 4));
 
 	// Enable the apropriate layer
 	LAYER_PORT |= (0x01 << (7 - current_layer));
