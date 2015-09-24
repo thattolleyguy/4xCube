@@ -217,9 +217,13 @@ void launch_effect (int effect)
 			flyplane("x",0,1000);
 			delay_ms(2000);
 			break;
+		
+		case 12:
+			effect_teeter_totter(50,1000);
+			break;
 			
 		// Fade in and out at low framerate
-		case 12:
+		case 13:
 			blinky2();
 			break;
 	}

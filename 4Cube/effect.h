@@ -12,6 +12,7 @@
 void effect_spiral(int direction, int iterations, int delay);
 void effect_spinning_plane(int direction, int iterations, int delay);
 void effect_rain (int iterations, int delay, int hold, int speed);
+void effect_teeter_totter (int iterations, int delay);
 void sendvoxel_z (unsigned char x, unsigned char y, unsigned char z, int delay);
 void sendplane_rand_z (unsigned char z, int delay, int wait);
 void blinky(void);

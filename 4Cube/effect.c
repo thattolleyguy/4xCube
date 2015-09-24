@@ -23,6 +23,40 @@ const unsigned char spinning_line[6] PROGMEM =
 	 0x0C,
 };
 
+const unsigned char teeter_totter[6][4] PROGMEM =
+{
+	{0x84,0x48,0x21,0x12},
+	{0x00,0xCC,0x33,0x00},
+	{0x00,0x33,0xCC,0x00},
+	{0x12,0x21,0x48,0x84},
+	{0x00,0x33,0xCC,0x00},
+	{0x00,0xCC,0x33,0x00},
+};
+
+void effect_teeter_totter(int iterations, int delay)
+{
+	int i;
+	int z;		// cube level
+
+	for (i=0;i<iterations;i++)
+	{
+		// Loop cube levels
+		for (z=0;z<4;z++)
+		{
+			// Read the animation from program memory and put it in the cube buffer.
+			// y=0 and y=2 is stored in the upper nibble of the byte, and must be bitshifted into place.
+			cube[z][0] = (pgm_read_byte(&(teeter_totter[(i%6)][z])) >> 4);
+			cube[z][1] = pgm_read_byte(&(teeter_totter[(i%6)][z]));
+			cube[z][2] = pgm_read_byte(&(teeter_totter[(i%6)][z]));
+			cube[z][3] = (pgm_read_byte(&(teeter_totter[(i%6)][z])) >> 4);
+			// the +z makes the animation iterate one step for each plane
+			// making it into a spiral
+		}
+		delay_ms(delay);
+	}
+	
+	
+}
 // Shows an animation of a spinning spiral
 void effect_spiral(int direction, int iterations, int delay)
 {
