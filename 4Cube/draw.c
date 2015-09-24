@@ -137,8 +137,7 @@ void setplane_x (int x)
 	{
 		for (y=0;y<4;y++)
 		{
-			// Set a bit, and shift it inwards to the right X
-			cube[z][y] |= (0x01 << x);
+			setvoxel(x,y,z);
 		}
 	}
 }
@@ -152,7 +151,7 @@ void clrplane_x (int x)
 	{
 		for (y=0;y<4;y++)
 		{
-			cube[z][y] &= ~(0x01 << x);
+			clrvoxel(x,y,z);
 		}
 	}
 }

@@ -80,9 +80,9 @@ int main (void)
 	// will run on timed intervalls.
 	sei();
 	//launch_effect(4);
-	// Main program loop.
-	startup();
-	launch_effect(11);
+	// Main program loop.	
+	/*startup();
+	launch_effect(11);*/
 	while (1)
 	{
 		for (i=0;i<13;i++)
@@ -108,7 +108,7 @@ void startup()
 			for(int k=0;k<4;k++)
 			{
 				setvoxel(i,j,k);
-				delay_ms(2000);
+				delay_ms(1000);
 			}
 		
 		}

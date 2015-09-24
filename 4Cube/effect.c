@@ -13,14 +13,14 @@
 #include "draw.h"
 #include "effect.h"
 
-const unsigned char spinning_line[6][2] =
+const unsigned char spinning_line[6] PROGMEM =
 {
-	{ 0x84, 0x21 },
-	{ 0x0c, 0x30 },
-	{ 0x03, 0xc0 },
-	{ 0x12, 0x48 },
-	{ 0x22, 0x44 },
-	{ 0x44, 0x22 },
+	 0x84,
+	 0x44,
+	 0x22,
+	 0x12,
+	 0x03,
+	 0x0C,
 };
 
 // Shows an animation of a spinning spiral
@@ -36,10 +36,10 @@ void effect_spiral(int direction, int iterations, int delay)
 		{
 			// Read the animation from program memory and put it in the cube buffer.
 			// y=0 and y=2 is stored in the upper nibble of the byte, and must be bitshifted into place.
-			cube[z][0] = (pgm_read_byte(&spinning_line[(i+z)%6][0]) >> 4);
-			cube[z][1] = pgm_read_byte(&spinning_line[(i+z)%6][0]);
-			cube[z][2] = (pgm_read_byte(&spinning_line[(i+z)%6][1]) >> 4);
-			cube[z][3] = pgm_read_byte(&spinning_line[(i+z)%6][1]);
+			cube[z][0] = (pgm_read_byte(&spinning_line[(i+z)%6]) >> 4);
+			cube[z][1] = pgm_read_byte(&spinning_line[(i+z)%6]);
+			cube[z][2] = pgm_read_byte(&spinning_line[(i+z)%6]);
+			cube[z][3] = (pgm_read_byte(&spinning_line[(i+z)%6]) >> 4);
 			// the +z makes the animation iterate one step for each plane
 			// making it into a spiral
 		}
@@ -58,10 +58,10 @@ void effect_spinning_plane(int direction, int iterations, int delay)
 		// Loop cube levels.
 		for (z=0;z<4;z++)
 		{
-			cube[z][0] = (pgm_read_byte(&spinning_line[(i)%6][0]) >> 4);
-			cube[z][1] = pgm_read_byte(&spinning_line[(i)%6][0]);
-			cube[z][2] = (pgm_read_byte(&spinning_line[(i)%6][1]) >> 4);
-			cube[z][3] = pgm_read_byte(&spinning_line[(i)%6][1]);
+			cube[z][0] = (pgm_read_byte(&spinning_line[(i)%6]) >> 4);
+			cube[z][1] = pgm_read_byte(&spinning_line[(i)%6]);
+			cube[z][2] = pgm_read_byte(&spinning_line[(i)%6]);
+			cube[z][3] = (pgm_read_byte(&spinning_line[(i)%6]) >> 4);
 		}
 		delay_ms(delay);
 	}

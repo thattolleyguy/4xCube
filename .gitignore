@@ -41,3 +41,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.atsuo
+4Cube/Debug/4Cube.eep
+*.elf
+4Cube/Debug/4Cube.hex
+*.lss
+4Cube/Debug/4Cube.map
+4Cube/Debug/4Cube.srec
+Debug
+/4Cube/Debug/makedep.mk
