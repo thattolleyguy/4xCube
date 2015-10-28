@@ -58,6 +58,8 @@ void launch_effect (int effect); // effect program launcher
 
 // What layer the interrupt routine is currently showing.
 volatile unsigned char current_layer;
+volatile unsigned int next_effect;
+volatile int effect_set = 0;
 
 
 int main (void)
@@ -81,19 +83,29 @@ int main (void)
 	sei();
 	//launch_effect(4);
 	// Main program loop.	
-	/*startup();
-	launch_effect(11);*/
+	/*startup();*/
+	//launch_effect(12);
 	while (1)
 	{
-		for (i=0;i<13;i++)
+		/*for (i=0;i<13;i++)
 		{
 			launch_effect(i);
-		}
+		}*/
 		
 		
 		// Comment the loop above and uncomment the line below
 		// if you want the effects in random order (produced some bugs.. )
-		//launch_effect(rand()%13);
+		
+		if(next_effect>13)
+			next_effect==0;
+		if(effect_set){
+			launch_effect(next_effect);
+			for(int y=0; y<4; y++)
+			{
+				clrplane_y(y);
+			}
+			effect_set=0;
+		}
 	}
 
 }
@@ -219,7 +231,7 @@ void launch_effect (int effect)
 			break;
 		
 		case 12:
-			effect_teeter_totter(50,1000);
+			effect_teeter_totter(50,2000);
 			break;
 			
 		// Fade in and out at low framerate
@@ -325,12 +337,22 @@ void ioinit (void)
 	// bit 3        stop bits 0 = 1 bit  1 = 2 bits
 	// bit 2-1      frame length 11 = 8
 	// bit 0        clock polarity = 0
-	UCSRC  = 0b10000110;
+	//UCSRC  = 0b10000110;
+	UCSRC = (1 << URSEL) | (1 << UCSZ0) | (1 << UCSZ1);
 	// Enable RS232, tx and rx
 	UCSRB = (1<<RXEN)|(1<<TXEN);
+	UCSRB |= (1 << RXCIE);
 	UDR = 0x00; // send an empty byte to indicate powerup.
-
 }
+
+ISR ( USART_RXC_vect )
+{
+	char ReceivedByte ;
+	ReceivedByte = UDR ; // Fetch the received byte value into the variable " ByteReceived "
+	next_effect=ReceivedByte-97;
+	effect_set = 1;
+	UDR = ReceivedByte ; // Echo back the received byte back to the computer
+}
 
 
 // Blink the status LEDs a little to indicate that the device has just booted.
