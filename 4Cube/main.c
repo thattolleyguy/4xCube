@@ -60,6 +60,7 @@ void launch_effect (int effect); // effect program launcher
 volatile unsigned char current_layer;
 volatile unsigned int next_effect;
 volatile int effect_set = 0;
+volatile int mode=0;
 
 
 int main (void)
@@ -98,14 +99,23 @@ int main (void)
 		
 		if(next_effect>13)
 			next_effect==0;
-		if(effect_set){
-			launch_effect(next_effect);
-			for(int y=0; y<4; y++)
-			{
-				clrplane_y(y);
-			}
-			effect_set=0;
+		switch(mode)
+		{
+			case 0://Bluetooth mode
+				if(effect_set){
+					launch_effect(next_effect);
+					for(int y=0; y<4; y++)
+					{
+						clrplane_y(y);
+					}
+					effect_set=0;
+				}
+				break;	
+			case 1: //Incremental mode
+				launch_effect(next_effect++);
+				break;
 		}
+		
 	}
 
 }
