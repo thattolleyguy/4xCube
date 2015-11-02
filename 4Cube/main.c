@@ -113,6 +113,10 @@ int main (void)
 				break;	
 			case 1: //Incremental mode
 				launch_effect(next_effect++);
+				for(int y=0; y<4; y++)
+				{
+					clrplane_y(y);
+				}
 				break;
 		}
 		
@@ -249,6 +253,9 @@ void launch_effect (int effect)
 			blinky2();
 			break;
 	}
+	while (!( UCSRA & (1<<UDRE)));                // wait while register is free
+	UDR = 'z';
+	
 }
 
 // ** Diagnostic led functions **
@@ -301,6 +308,19 @@ ISR(TIMER2_COMP_vect)
 		current_layer = 0;
 }
 
+ISR(INT2_vect)
+{
+	if(mode==0)
+	{
+		mode=1;
+	}	
+	else
+	{
+		mode=0;
+	}
+			
+}
+
 void ioinit (void)
 {
 	// ### Initiate I/O
@@ -309,14 +329,14 @@ void ioinit (void)
 	// Bit set to 1 means it works as an output
 	// Bit set to 1 means it is an input
 	DDRA = 0xff;	// Inner cube byte
-	DDRB = 0xf7;	// ISP and 0-1: led. 3: button
+	DDRB = 0xf3;	// ISP and 0-1: led. 3: button
 	DDRC = 0xff;	// Outer cube byte
 	DDRD = 0xff;	// Layer select
 	
 	// Set all ports OFF, and enable pull up resistors where needed.
 	PORTA = 0x00;
 	PORTC = 0x00;
-	PORTB = 0x08; // Enable pull up button.
+	PORTB = 0x0C; // Enable pull up button.
 	PORTD = 0x00;
 
 	// ### Initiate timers and USART
@@ -353,6 +373,10 @@ void ioinit (void)
 	UCSRB = (1<<RXEN)|(1<<TXEN);
 	UCSRB |= (1 << RXCIE);
 	UDR = 0x00; // send an empty byte to indicate powerup.
+	
+	// Setup the INT2 interrupt
+	GICR |= (1 << INT2);
+	MCUCSR &= ~(1 << ISC2);
 }
 
 ISR ( USART_RXC_vect )

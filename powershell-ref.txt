@@ -1,0 +1,5 @@
+$action = {write-host $sender.readexising() }
+
+register-objectevent -action $action -inputObject $port -eventname "DataReceived"
+
+$port = new-Object System.IO.Ports.SerialPort COM17,9600,None,8,One

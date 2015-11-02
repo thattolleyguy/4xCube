@@ -28,9 +28,9 @@ void setvoxel(int x, int y, int z)
 	if (inrange(x, y, z))
 	{
 		if(y<=1)
-		cube[z][y] |= (1 << x);
+			cube[z][y] |= (1 << x);
 		else
-		cube[z][y] |= (0x08 >>x);
+			cube[z][y] |= (0x08 >> x);
 		
 	}
 }
